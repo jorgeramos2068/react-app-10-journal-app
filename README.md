@@ -1,4 +1,6 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# React App - Journal App
+
+React web application that implements a backend journal app with Redux and Sass.
 
 ## Available Scripts
 

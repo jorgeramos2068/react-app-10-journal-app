@@ -1,7 +1,15 @@
 import React from 'react';
+import {useDispatch} from 'react-redux';
 import JournalEntries from './JournalEntries';
+import {startLogout} from '../../actions/auth';
 
 const Sidebar = () => {
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(startLogout());
+  }
+
   return (
     <aside className="journal__sidebar">
       <div className="journal__sidebar-navbar">
@@ -9,7 +17,10 @@ const Sidebar = () => {
           <i className="far fa-moon"></i>
           <span> Batman</span>
         </h3>
-        <button className="btn">
+        <button
+          className="btn"
+          onClick={handleLogout}
+        >
           Logout
         </button>
       </div>

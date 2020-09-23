@@ -47,7 +47,7 @@ const NoteScreen = () => {
           (note.url) &&
           <div className="notes__image">
             <img
-              src="https://www.theguardian.pe.ca/media/photologue/photos/cache/B97946073Z.1_20190906151130_000GMGP7UF1.1-1_large.jpg"
+              src={note.url}
               alt="Notes"
             />
           </div>

@@ -1,23 +1,38 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { startLoadingNotes, startNewNote, startSaveNote } from '../../actions/notes';
+import { startLoadingNotes, startNewNote, startSaveNote, startUploading } from '../../actions/notes';
 import { db } from '../../firebase/firebase-config';
+import uploadFile from '../../helpers/uploadFile';
 import types from '../../types/types';
- 
-const middlewares = [thunk];
-const mockStore = configureStore(middlewares);
-let store;
-
-beforeEach(() => {
-  // Create store mock
-  store = mockStore({
-    auth: {
-      uid: 'test_id'
-    }
-  });
-});
 
 describe('Tests for notes actions', () => {
+  jest.mock('../../helpers/uploadFile', () => ({
+    __esModule: true,
+    default: jest.fn(() => {
+      return 'https://test.com/test.jpg';
+    })
+  }));
+
+  const middlewares = [thunk];
+  const mockStore = configureStore(middlewares);
+  let store;
+
+  beforeEach(() => {
+    // Create store mock
+    store = mockStore({
+      auth: {
+        uid: 'test_id'
+      },
+      notes: {
+        active: {
+          id: 'CCwfC3iqLsloneSQAlI0',
+          title: 'Updated title',
+          body: 'Updated body'
+        }
+      }
+    });
+  });
+
   test('Should create a new note with startNewNote action', async() => {
     await store.dispatch(startNewNote());
     const payload = {
@@ -67,5 +82,12 @@ describe('Tests for notes actions', () => {
     expect(actions[0].type).toBe(types.notesUpdate);
     const docRef = await db.doc(`/test_id/journal/notes/${note.id}`).get();
     expect(docRef.data().title).toBe(note.title);
+  });
+
+  test('Should update the image url with startUploading', async() => {
+    const file = new File([], 'photo.jpg');
+    await store.dispatch(startUploading(file));
+    const docRef = await db.doc('/test_id/journal/notes/CCwfC3iqLsloneSQAlI0').get();
+    expect(docRef.data().url).toBe('https://test.com/test.jpg');
   });
 });

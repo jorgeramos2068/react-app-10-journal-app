@@ -11,7 +11,7 @@ const types = {
   notesAddNew: '[Notes] New note',
   notesActive: '[Notes] Set active note',
   notesLoad: '[Notes] Load notes',
-  notesUpdate: '[Notes] Update node',
+  notesUpdate: '[Notes] Update note',
   notesImgUrl: '[Notes] Update image url',
   notesDelete: '[Notes] Delete node',
   notesLogoutCleaning: '[Notes] Logout cleaning',

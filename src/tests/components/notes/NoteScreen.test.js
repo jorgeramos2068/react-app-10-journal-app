@@ -4,22 +4,17 @@ import { mount } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import Sidebar from '../../../components/journal/Sidebar';
-import { startLogout } from '../../../actions/auth';
-import { startNewNote } from '../../../actions/notes';
+import NoteScreen from '../../../components/notes/NoteScreen';
+import { activateNote } from '../../../actions/notes';
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
-jest.mock('../../../actions/auth', () => ({
-  startLogout: jest.fn()
-}));
-
 jest.mock('../../../actions/notes', () => ({
-  startNewNote: jest.fn()
+  activateNote: jest.fn()
 }));
 
-describe('Tests in Sidebar component', () => {
+describe('Tests in NoteScreen component', () => {
   const initialState = {
     auth: {
       uid: 'test_id',
@@ -30,7 +25,12 @@ describe('Tests in Sidebar component', () => {
       msgError: null
     },
     notes: {
-      active: null,
+      active: {
+        id: 'test_id',
+        title: 'Test',
+        body: 'Test body',
+        date: 0
+      },
       notes: []
     }
   };
@@ -43,22 +43,27 @@ describe('Tests in Sidebar component', () => {
     store.dispatch = jest.fn();
     wrapper = mount(
       <Provider store={store}>
-        <Sidebar />
+        <NoteScreen />
       </Provider>
     );
   });
 
-  test('Should display Sidebar correctly', () => {
+  test('Should display NoteScreen correctly', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  test('Should dispatch startLogout action when required', () => {
-    wrapper.find('.btn').prop('onClick')();
-    expect(startLogout).toHaveBeenCalled();
-  });
-
-  test('Should dispatch startNewNote action when required', () => {
-    wrapper.find('.journal__new-entry').prop('onClick')();
-    expect(startNewNote).toHaveBeenCalled();
+  test('Should dispatch activateNote action when required', () => {
+    wrapper.find('input[name="title"]').simulate('change', {
+      target: {
+        name: 'title',
+        value: 'Test change'
+      }
+    });
+    expect(activateNote).toHaveBeenLastCalledWith('test_id', {
+      id: 'test_id',
+      title: 'Test change',
+      body: 'Test body',
+      date: 0
+    });
   });
 });

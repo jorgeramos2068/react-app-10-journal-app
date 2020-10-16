@@ -24,7 +24,7 @@ describe('Tests for uploadFile helper', () => {
 
   test('Should return null', async () => {
     const file = new File([], 'photo.jpg');
-    const url = uploadFile(file);
+    const url = await uploadFile(file);
     expect(url).toBe(null);
   });
 });

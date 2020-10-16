@@ -15,6 +15,7 @@ exports[`Tests in Sidebar component Should display Sidebar correctly 1`] = `
       />
       <span>
          
+        Test
       </span>
     </h3>
     <button
